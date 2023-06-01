@@ -60,9 +60,11 @@ public class Neuronio {
 	public void inicializar(int numeroEntradas) {
 		this.pesos = new Double[numeroEntradas];
 		for(int i = 0; i < numeroEntradas; i++) {
-			pesos[i] = RandomUtil.gerarNumeroAleatorio(0.01, 0.9); 
+			pesos[i] = RandomUtil.gerarNumeroAleatorio(-0.09, 0.09);
+			//pesos[i] = 0.001;
 		}
-		this.bias = RandomUtil.gerarNumeroAleatorio(0.01, 0.9);
+		//this.bias = 0.001;
+		this.bias = RandomUtil.gerarNumeroAleatorio(-0.09, 0.09);
 	}
 	
 	public Double calcular(Double entradas[]) throws RedeNeuralException{

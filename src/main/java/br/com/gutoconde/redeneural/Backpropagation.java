@@ -74,7 +74,7 @@ public class Backpropagation {
 				double delta = 0;
 				
 				if(camada.isCamadaDeSaida()) {
-					double erro = saida - saidasDesejadas[i];
+					double erro = saidasDesejadas[i] - saida;
 					//verificar se deve multiplicar o delta por 2
 					delta =  erro * neuronio.getFuncaoDeAtivacao().calcularDerivada(saida);
 					//delta = erro * saida * ( 1.0 - saida); 
@@ -115,12 +115,12 @@ public class Backpropagation {
 				Double[] deltasDaCamdada = deltasPorCamada.get(k);
 				for(int i = 0; i < neuronio.getPesos().length; i++ ) {
 					
-					//neuronio.getPesos()[i] = neuronio.getPesos()[i]  
-					//		- this.taxaAprendizado * deltasDaCamdada[j] * neuronio.getEntradas()[i];
 					neuronio.getPesos()[i] = neuronio.getPesos()[i]  
-							-  this.taxaAprendizado * deltasDaCamdada[j] * neuronio.getSaida();
+							+ this.taxaAprendizado * deltasDaCamdada[j] * neuronio.getEntradas()[i];
+					//neuronio.getPesos()[i] = neuronio.getPesos()[i]  
+					//		-  this.taxaAprendizado * deltasDaCamdada[j] * neuronio.getSaida();
 				}
-				neuronio.setBias(neuronio.getBias() - this.taxaAprendizado * deltasDaCamdada[j]); 
+				neuronio.setBias(neuronio.getBias() + this.taxaAprendizado * deltasDaCamdada[j]); 
 			}
 			k++;
 		}

@@ -18,15 +18,15 @@ public class ClassificacaoXOR {
 	@Test
 	public void testarClassificacaoXOR() throws RedeNeuralException {
 		//Criando rede
-		List<Integer> camadas = Arrays.asList(new Integer[]{2,2,1});
+		List<Integer> camadas = Arrays.asList(new Integer[]{2,7,1});
 		Perceptron rede = Perceptron.criar(camadas, new FuncaoSigmoid());
-		Backpropagation backprop = new Backpropagation(rede, 0.001, 0.04, 1000000000);
+		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.01, 10000000);
 		
 		List<Double[]> entradas = new ArrayList<Double[]>();
-		entradas.add(new Double[]{0.0, 0.0});
-		entradas.add(new Double[]{0.0, 1.0});
+		entradas.add(new Double[]{0.01, 0.01});
+		entradas.add(new Double[]{0.01, 1.0});
 		entradas.add(new Double[]{1.0, 1.0});
-		entradas.add(new Double[]{1.0, 0.0});
+		entradas.add(new Double[]{1.0, 0.01});
 		
 		List<Double[]> saidasDesejadas = new ArrayList<Double[]>();
 		saidasDesejadas.add(new Double[]{0.0});
@@ -40,16 +40,16 @@ public class ClassificacaoXOR {
 		//testando a rede
 		
 		Double[] resultado = rede.calcular(new Double[]{0.0, 0.0});
-		assertEquals(0.0, resultado[0], 0.1);
+		assertEquals(0.0, resultado[0], 0.01);
 		
 		resultado = rede.calcular(new Double[]{0.0, 1.0});
-		assertEquals(1.0, resultado[0], 0.1);
+		assertEquals(1.0, resultado[0], 0.01);
 		
 		resultado = rede.calcular(new Double[]{1.0, 0.0});
-		assertEquals(1.0, resultado[0], 0.1);
+		assertEquals(1.0, resultado[0], 0.01);
 		
 		resultado = rede.calcular(new Double[]{1.0, 1.0});
-		assertEquals(0.0, resultado[0], 0.1);
+		assertEquals(0.0, resultado[0], 0.01);
 	}
 	
 }
