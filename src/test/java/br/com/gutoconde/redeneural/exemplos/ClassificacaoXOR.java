@@ -18,9 +18,9 @@ public class ClassificacaoXOR {
 	@Test
 	public void testarClassificacaoXOR() throws RedeNeuralException {
 		//Criando rede
-		List<Integer> camadas = Arrays.asList(new Integer[]{2,7,1});
+		List<Integer> camadas = Arrays.asList(new Integer[]{2,2,1});
 		Perceptron rede = Perceptron.criar(camadas, new FuncaoSigmoid());
-		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.01, 10000000);
+		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.04, 10000000);
 		
 		List<Double[]> entradas = new ArrayList<Double[]>();
 		entradas.add(new Double[]{0.01, 0.01});

@@ -13,7 +13,7 @@ public class Neuronio {
 	private Double[] entradas;
 	private Double saida;
 	
-	
+	private Double delta;
 	
 	private Neuronio(int numeroEntradas, FuncaoDeAtivacao funcaoDeAtivacao) {
 		this.funcaoDeAtivacao = funcaoDeAtivacao;
@@ -57,14 +57,20 @@ public class Neuronio {
 		return this.entradas;
 	}
 	
+	public Double getDelta() {
+		return delta;
+	}
+
+	public void setDelta(Double delta) {
+		this.delta = delta;
+	}
+
 	public void inicializar(int numeroEntradas) {
 		this.pesos = new Double[numeroEntradas];
 		for(int i = 0; i < numeroEntradas; i++) {
-			pesos[i] = RandomUtil.gerarNumeroAleatorio(-0.09, 0.09);
-			//pesos[i] = 0.001;
+			pesos[i] = RandomUtil.gerarNumeroAleatorio(-0.1, 0.1);
 		}
-		//this.bias = 0.001;
-		this.bias = RandomUtil.gerarNumeroAleatorio(-0.09, 0.09);
+		this.bias = RandomUtil.gerarNumeroAleatorio(-0.1, 0.1);
 	}
 	
 	public Double calcular(Double entradas[]) throws RedeNeuralException{

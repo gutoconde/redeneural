@@ -1,7 +1,6 @@
 package br.com.gutoconde.redeneural;
 
 import java.util.Arrays;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Camada {

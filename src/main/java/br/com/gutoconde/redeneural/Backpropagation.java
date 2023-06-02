@@ -39,8 +39,8 @@ public class Backpropagation {
 				Double[] saidasDesejadas = conjuntoSaidasDesejadas.get(i);
 				Double[] saidas = rede.calcular(entradas);
 				erroAcumulado = erroAcumulado + calcularErro(saidas, saidasDesejadas);
-				Map<Integer, Double[]> deltasPorCamada = calcularDeltas(entradas, saidasDesejadas);
-				atualizarPesos(deltasPorCamada);
+				calcularDeltas(entradas, saidasDesejadas);
+				atualizarPesos();
 			}
 			iteracoes++;
 			erroMedio = erroAcumulado / ( 2.0 *  new Double(conjuntoEntradas.size()));
@@ -57,12 +57,8 @@ public class Backpropagation {
 		return erro;
 	}
 	
-	Map<Integer, Double[]> calcularDeltas(Double[] entradas, Double[] saidasDesejadas) throws RedeNeuralException {
-		//deltasPorCamada: guarda os deltas calculados
-		Map<Integer, Double[]> deltasPorCamada = new HashMap<Integer, Double[]>();
-		
+	void calcularDeltas(Double[] entradas, Double[] saidasDesejadas) throws RedeNeuralException {
 		Camada camada = rede.getCamadaDeSaida();
-		
 		//Inicializa o indice da camada k = 0 seria a camada de entrada
 		int k = rede.getNumeroCamadas() - 1;
 		
@@ -75,36 +71,27 @@ public class Backpropagation {
 				
 				if(camada.isCamadaDeSaida()) {
 					double erro = saidasDesejadas[i] - saida;
-					//verificar se deve multiplicar o delta por 2
 					delta =  erro * neuronio.getFuncaoDeAtivacao().calcularDerivada(saida);
-					//delta = erro * saida * ( 1.0 - saida); 
 				} else {
 					Camada camadaSeguinte = camada.getCamadaSeguinte();
 					double somatorio = 0.0;
 					for(int j = 0; j < camadaSeguinte.getNumeroNeuronios(); j++) {
 						Neuronio neurorioCamadaSeguinte = camadaSeguinte.getNeuronios()[j];
 						double w = neurorioCamadaSeguinte.getPesos()[i];
-						double deltaCamadaSeguinte = deltasPorCamada.get(k+1)[j]; 
-						somatorio = somatorio + w * deltaCamadaSeguinte;
+						 
+						somatorio = somatorio + w * neurorioCamadaSeguinte.getDelta();
 					}
 					delta = somatorio * neuronio.getFuncaoDeAtivacao().calcularDerivada(saida);
-					//delta = somatorio * saida * (1.0 - saida);
 				}
-				
-				if(deltasPorCamada.get(k) == null) {
-					deltasPorCamada.put(k, new Double[camada.getNeuronios().length]);
-				};
-				
-				deltasPorCamada.get(k)[i] = delta;
+				neuronio.setDelta(delta);
 			};
 			
 			camada = camada.getCamadaAnterior();
 			k--;
 		}
-		return deltasPorCamada;
 	}
-
-	void atualizarPesos(Map<Integer, Double[]> deltasPorCamada) {
+	
+	void atualizarPesos() {
 		//A Atualizacao dos pesos comeca a partir das camadas de entrada
 		Camada camada = rede.getCamadaDeEntrada();
 		int k = 1;
@@ -112,15 +99,13 @@ public class Backpropagation {
 			camada = camada.getCamadaSeguinte();
 			for(int j = 0; j < camada.getNumeroNeuronios(); j++) {
 				Neuronio neuronio = camada.getNeuronios()[j];
-				Double[] deltasDaCamdada = deltasPorCamada.get(k);
+				
 				for(int i = 0; i < neuronio.getPesos().length; i++ ) {
 					
 					neuronio.getPesos()[i] = neuronio.getPesos()[i]  
-							+ this.taxaAprendizado * deltasDaCamdada[j] * neuronio.getEntradas()[i];
-					//neuronio.getPesos()[i] = neuronio.getPesos()[i]  
-					//		-  this.taxaAprendizado * deltasDaCamdada[j] * neuronio.getSaida();
+							+ this.taxaAprendizado * neuronio.getDelta() * neuronio.getEntradas()[i];
 				}
-				neuronio.setBias(neuronio.getBias() + this.taxaAprendizado * deltasDaCamdada[j]); 
+				neuronio.setBias(neuronio.getBias() + this.taxaAprendizado * neuronio.getDelta()); 
 			}
 			k++;
 		}
