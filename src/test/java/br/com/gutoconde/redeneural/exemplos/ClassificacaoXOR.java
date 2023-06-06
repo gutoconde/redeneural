@@ -1,5 +1,7 @@
 package br.com.gutoconde.redeneural.exemplos;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,19 +44,19 @@ public class ClassificacaoXOR {
 		System.out.println("Fim do treinamento: ");
 		Double[] resultado = rede.calcular(new Double[]{0.0, 0.0});
 		System.out.println("0 0 - " + resultado[0]);
-		//assertEquals(0.0, resultado[0], 0.1);
+		assertEquals(0.0, resultado[0], 0.1);
 		
 		resultado = rede.calcular(new Double[]{0.0, 1.0});
 		System.out.println("0 1 - " + resultado[0]);
-		//assertEquals(1.0, resultado[0], 0.1);
+		assertEquals(1.0, resultado[0], 0.1);
 		
 		resultado = rede.calcular(new Double[]{1.0, 0.0});
 		System.out.println("1 0 - " + resultado[0]);
-		//assertEquals(1.0, resultado[0], 0.1);
+		assertEquals(1.0, resultado[0], 0.1);
 		
 		resultado = rede.calcular(new Double[]{1.0, 1.0});
 		System.out.println("1 1 - " + resultado[0]);
-		//assertEquals(0.0, resultado[0], 0.1);
+		assertEquals(0.0, resultado[0], 0.1);
 	}
 	
 }
