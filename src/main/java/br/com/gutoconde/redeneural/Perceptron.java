@@ -1,16 +1,19 @@
 package br.com.gutoconde.redeneural;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Perceptron {
+public class Perceptron implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private Camada camadaDeEntrada;
 	
-	private Double[] entradas;
+	private transient Double[] entradas;
 	
-	private Double[] saidas;
+	private transient Double[] saidas;
 	
 	private Integer numeroCamadas = 0;
 	
@@ -19,7 +22,7 @@ public class Perceptron {
 		assert neuroniosEmCadaCamada.size() == funcoesAtivacaoEmCadaCamada.size();
 		this.numeroCamadas = neuroniosEmCadaCamada.size();
 		Camada camada = null;
-		for(int i=0; i < neuroniosEmCadaCamada.size(); i++) {
+		for(int i=0; i < numeroCamadas; i++) {
 			if(camada == null) {
 				camada = Camada.criarPrimeiraCamada(neuroniosEmCadaCamada.get(i));
 				camadaDeEntrada = camada;
@@ -71,6 +74,27 @@ public class Perceptron {
 	@Override
 	public String toString() {
 		return "Perceptron : { entradas: " + Arrays.toString(entradas) + ", saidas: " + Arrays.toString(saidas) + "}";
+	}
+	
+	public String toJSON() {
+		Camada camada = getCamadaDeEntrada();
+		StringBuilder str = new StringBuilder();
+		
+		str.append("{ rede : { ");
+		str.append("\n");
+		str.append(" ");
+		str.append("camadas : [ ");
+		do {
+			camada = camada.getCamadaSeguinte();
+			str.append(camada.toJSON());
+		}while(!camada.isCamadaDeSaida());
+		str.append("\n");
+		str.append(" ");
+		str.append("]");
+		str.append("\n");
+		str.append(" ");
+		str.append("}} ");
+		return str.toString();
 	}
 	
 }

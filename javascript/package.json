@@ -1,0 +1,15 @@
+{
+  "name": "redeneural",
+  "version": "1.0.0",
+  "description": "Testes de Rede Neural para Comparacoes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "brain.js": "^2.0.0-beta.23"
+  }
+}

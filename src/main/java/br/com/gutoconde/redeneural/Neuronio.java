@@ -1,28 +1,40 @@
 package br.com.gutoconde.redeneural;
 
+import java.io.Serializable;
+
 import br.com.gutoconde.redeneural.util.RandomUtil;
 
-public class Neuronio {
+public class Neuronio implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private Double pesos[];
 	
 	private Double bias;
 	
-	private FuncaoDeAtivacao funcaoDeAtivacao;
+	private Double gradientesAcumulados[];
 	
-	private Double[] entradas;
-	private Double saida;
+	private Double gradienteAcumuladoBias;
 	
-	private Double delta;
+	private transient FuncaoDeAtivacao funcaoDeAtivacao;
+	
+	private transient Double[] entradas;
+	
+	private transient Double saida;
+	
+	private transient Double delta;
+	
+	
 	
 	private Neuronio(int numeroEntradas, FuncaoDeAtivacao funcaoDeAtivacao) {
 		this.funcaoDeAtivacao = funcaoDeAtivacao;
 		pesos = new Double[numeroEntradas];
 	}
 	
-	private Neuronio(FuncaoDeAtivacao funcaoDeAtivacao, Double pesos[]) {
+	private Neuronio(FuncaoDeAtivacao funcaoDeAtivacao, Double pesos[], Double bias) {
 		this.funcaoDeAtivacao = funcaoDeAtivacao;
 		this.pesos = pesos;
+		this.bias = bias;
 	}
 	
 	public static Neuronio criar(int numeroEntradas, FuncaoDeAtivacao funcaoDeAtivacao) {
@@ -43,6 +55,22 @@ public class Neuronio {
 
 	public void setBias(Double bias) {
 		this.bias = bias;
+	}
+	
+	public Double[] getGradientesAcumulados() {
+		return gradientesAcumulados;
+	}
+
+	public void setGradientesAcumulados(Double[] gradientesAcumulados) {
+		this.gradientesAcumulados = gradientesAcumulados;
+	}
+	
+	public Double getGradienteAcumuladoBias() {
+		return gradienteAcumuladoBias;
+	}
+
+	public void setGradienteAcumuladoBias(Double gradienteAcumuladoBias) {
+		this.gradienteAcumuladoBias = gradienteAcumuladoBias;
 	}
 
 	public FuncaoDeAtivacao getFuncaoDeAtivacao() {
@@ -67,10 +95,13 @@ public class Neuronio {
 
 	public void inicializar(int numeroEntradas) {
 		this.pesos = new Double[numeroEntradas];
+		this.gradientesAcumulados = new Double[numeroEntradas];
 		for(int i = 0; i < numeroEntradas; i++) {
-			pesos[i] = RandomUtil.gerarNumeroAleatorio(-0.1, 0.1);
+			pesos[i] = RandomUtil.gerarNumeroAleatorio(0.0,  0.01);
+			gradientesAcumulados[i] = 0.0;
 		}
-		this.bias = RandomUtil.gerarNumeroAleatorio(-0.1, 0.1);
+		this.bias = RandomUtil.gerarNumeroAleatorio(0.0, 0.01);
+		this.gradienteAcumuladoBias = 0.0;
 	}
 	
 	public Double calcular(Double entradas[]) throws RedeNeuralException{
@@ -92,12 +123,38 @@ public class Neuronio {
 		}
 		Double somatorio = 0.0;
 		for (int i = 0; i < pesos.length; i++) {
-			somatorio = somatorio + entradas[i] * pesos[i];
+			somatorio += entradas[i] * pesos[i];
 		}
+		somatorio += bias;
+		this.saida = funcaoDeAtivacao.calcular(somatorio);
+		return this.saida; 
 		
-		somatorio = somatorio + bias;
-		saida = funcaoDeAtivacao.calcular(somatorio);
-		return saida; 
-		
+	}
+	
+	public String toJSON() {
+		StringBuilder str = new StringBuilder("");
+		str.append("\n");
+		str.append("   ");
+		str.append("{ ");
+		if(pesos != null && pesos.length > 0) {
+			str.append("\n");
+			str.append("    ");
+			str.append("pesos : [ ");
+			for(int i=0; i <getPesos().length; i++) {
+				str.append(getPesos()[i]);
+				if(i != getPesos().length -1) {
+					str.append(",");
+				}
+			}
+			str.append(" ],");
+			str.append("\n");
+			str.append("    ");
+			str.append("bias : ");
+			str.append(getBias());
+			str.append("\n");
+			str.append("   ");
+			str.append("} ");
+		}
+		return str.toString();
 	}
 }

@@ -1,8 +1,6 @@
 package br.com.gutoconde.redeneural;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class Backpropagation {
@@ -26,7 +24,7 @@ public class Backpropagation {
 		this.numeroEpocas = numeroEpocas;
 	}
 	
-	public void treinar(List<Double[]> conjuntoEntradas, List<Double[]> conjuntoSaidasDesejadas) throws RedeNeuralException {
+	public void treinarModoOnline(List<Double[]> conjuntoEntradas, List<Double[]> conjuntoSaidasDesejadas) throws RedeNeuralException {
 		assert conjuntoEntradas.size() == conjuntoSaidasDesejadas.size();
 		rede.inicializar();
 		int iteracoes = 0;
@@ -38,10 +36,34 @@ public class Backpropagation {
 				Double[] entradas = conjuntoEntradas.get(i);
 				Double[] saidasDesejadas = conjuntoSaidasDesejadas.get(i);
 				Double[] saidas = rede.calcular(entradas);
-				erroAcumulado = erroAcumulado + calcularErro(saidas, saidasDesejadas);
-				calcularDeltas(entradas, saidasDesejadas);
+				erroAcumulado += calcularErro(saidas, saidasDesejadas);
+				calcularDeltas(saidasDesejadas);
 				atualizarPesos();
 			}
+			iteracoes++;
+			erroMedio = erroAcumulado / ( 2.0 *  new Double(conjuntoEntradas.size()));
+			logger.info("Erro médio: " + erroMedio + " iteracoes: " + iteracoes);
+			
+		}while(erroMedio > erroMaximo && iteracoes < numeroEpocas);
+	}
+	
+	public void treinarModoBatch(List<Double[]> conjuntoEntradas, List<Double[]> conjuntoSaidasDesejadas) throws RedeNeuralException {
+		assert conjuntoEntradas.size() == conjuntoSaidasDesejadas.size();
+		rede.inicializar();
+		int iteracoes = 0;
+		double erroMedio = 0.0;
+		do {
+			double erroAcumulado = 0.0;
+			erroMedio = 0.0;
+			for (int i = 0; i < conjuntoEntradas.size(); i++) {
+				Double[] entradas = conjuntoEntradas.get(i);
+				Double[] saidasDesejadas = conjuntoSaidasDesejadas.get(i);
+				Double[] saidas = rede.calcular(entradas);
+				erroAcumulado += calcularErro(saidas, saidasDesejadas);
+				calcularDeltas(saidasDesejadas);
+				calcularGradientesAcumulados();
+			}
+			atualizarPesosComGradientesAcumulados();
 			iteracoes++;
 			erroMedio = erroAcumulado / ( 2.0 *  new Double(conjuntoEntradas.size()));
 			logger.info("Erro médio: " + erroMedio + " iteracoes: " + iteracoes);
@@ -52,15 +74,13 @@ public class Backpropagation {
 	Double calcularErro(Double[] saidas, Double[] saidasDesejadas) {
 		Double erro = 0.0;
 		for(int i =0; i< saidas.length; i++) {
-			erro = erro + Math.pow(saidas[i] - saidasDesejadas[i]  , 2.0) / 2.0;
+			erro += Math.pow(saidas[i] - saidasDesejadas[i]  , 2.0) / 2.0;
 		}
 		return erro;
 	}
 	
-	void calcularDeltas(Double[] entradas, Double[] saidasDesejadas) throws RedeNeuralException {
+	void calcularDeltas(Double[] saidasDesejadas) throws RedeNeuralException {
 		Camada camada = rede.getCamadaDeSaida();
-		//Inicializa o indice da camada k = 0 seria a camada de entrada
-		int k = rede.getNumeroCamadas() - 1;
 		
 		while(!camada.isCamadaDeEntrada()) {
 			
@@ -79,36 +99,58 @@ public class Backpropagation {
 						Neuronio neurorioCamadaSeguinte = camadaSeguinte.getNeuronios()[j];
 						double w = neurorioCamadaSeguinte.getPesos()[i];
 						 
-						somatorio = somatorio + w * neurorioCamadaSeguinte.getDelta();
+						somatorio += w * neurorioCamadaSeguinte.getDelta();
 					}
 					delta = somatorio * neuronio.getFuncaoDeAtivacao().calcularDerivada(saida);
 				}
 				neuronio.setDelta(delta);
 			};
-			
 			camada = camada.getCamadaAnterior();
-			k--;
 		}
 	}
 	
 	void atualizarPesos() {
-		//A Atualizacao dos pesos comeca a partir das camadas de entrada
 		Camada camada = rede.getCamadaDeEntrada();
-		int k = 1;
-		while(k < rede.getNumeroCamadas()) {
+		do {
 			camada = camada.getCamadaSeguinte();
-			for(int j = 0; j < camada.getNumeroNeuronios(); j++) {
-				Neuronio neuronio = camada.getNeuronios()[j];
-				
-				for(int i = 0; i < neuronio.getPesos().length; i++ ) {
-					
-					neuronio.getPesos()[i] = neuronio.getPesos()[i]  
-							+ this.taxaAprendizado * neuronio.getDelta() * neuronio.getEntradas()[i];
+			for(int i=0; i < camada.getNumeroNeuronios(); i++) {
+				Neuronio neuronio = camada.getNeuronios()[i];
+				for(int j=0; j < neuronio.getPesos().length; j++) {
+					neuronio.getPesos()[j] += taxaAprendizado * neuronio.getDelta() * neuronio.getEntradas()[j];   
 				}
-				neuronio.setBias(neuronio.getBias() + this.taxaAprendizado * neuronio.getDelta()); 
+				neuronio.setBias(neuronio.getBias() + taxaAprendizado * neuronio.getDelta());
 			}
-			k++;
-		}
+		} while(!camada.isCamadaDeSaida());
 	}
+	
+	private void calcularGradientesAcumulados() {
+		Camada camada = rede.getCamadaDeEntrada();
+		do {
+			camada = camada.getCamadaSeguinte();
+			for(int i=0; i < camada.getNumeroNeuronios(); i++) {
+				Neuronio neuronio = camada.getNeuronios()[i];
+				for(int j=0; j < neuronio.getPesos().length; j++) {
+					neuronio.getGradientesAcumulados()[j] += neuronio.getDelta() * neuronio.getEntradas()[j];
+				}
+				neuronio.setGradienteAcumuladoBias(neuronio.getGradienteAcumuladoBias()+ neuronio.getDelta());
+			}
+		} while(!camada.isCamadaDeSaida());
+	}
+	
+	private void atualizarPesosComGradientesAcumulados() {
+		Camada camada = rede.getCamadaDeEntrada();
+		do {
+			camada = camada.getCamadaSeguinte();
+			for(int i=0; i < camada.getNumeroNeuronios(); i++) {
+				Neuronio neuronio = camada.getNeuronios()[i];
+				for(int j=0; j < neuronio.getPesos().length; j++) {
+					neuronio.getPesos()[j] += taxaAprendizado * neuronio.getGradientesAcumulados()[j];   
+				}
+				neuronio.setBias(neuronio.getBias() + taxaAprendizado * neuronio.getGradienteAcumuladoBias());
+			}
+		} while(!camada.isCamadaDeSaida());
+	}
+
+	
 
 }

@@ -37,28 +37,33 @@ public class BackpropagationTest {
 		Camada camada1 = perceptron.getCamadaDeEntrada().getCamadaSeguinte();
 		camada1.getNeuronios()[0].setPesos(new Double[] { 0.1, 0.1 });
 		camada1.getNeuronios()[0].setBias(0.1);
+		camada1.getNeuronios()[0].setDelta(0.01);
+		
 		camada1.getNeuronios()[1].setPesos(new Double[] { 0.1, 0.1 });
 		camada1.getNeuronios()[1].setBias(0.1);
+		camada1.getNeuronios()[1].setDelta(0.02);
 		
 		Camada camadaDeSaida = perceptron.getCamadaDeSaida();
 		camadaDeSaida.getNeuronios()[0].setPesos(new Double[] { 0.1, 0.1 });
 		camadaDeSaida.getNeuronios()[0].setBias(0.1);
+		camadaDeSaida.getNeuronios()[0].setDelta(0.01);
 		
 		Double[] saidas = perceptron.calcular(new Double[] {0.0, 0.0});
 		assertEquals(0.5510702395380238, saidas[0]);
-		
-		
-		Map<Integer, Double[]> deltasPorCamada = new HashMap<Integer, Double[]>();
-		deltasPorCamada.put(1, new Double[] {0.01, 0.02});
-		deltasPorCamada.put(2, new Double[] {0.01});
 		
 		double peso1_0_0 = camada1.getNeuronios()[0].getPesos()[0];
 		double peso1_0_1_= camada1.getNeuronios()[0].getPesos()[1];
 				
 		Backpropagation backpropagation = new Backpropagation(perceptron, 0.01, 0, 0);
-		backpropagation.atualizarPesos(deltasPorCamada);
+		backpropagation.atualizarPesos();
 		
-		//assertEquals(peso1_0_0 - 0.01 * 0.01 * , camada1.getNeuronios()[0].getPesos()[0]);
+		assertEquals( 0.1, camada1.getNeuronios()[0].getPesos()[0]);
+		assertEquals( 0.1, camada1.getNeuronios()[0].getPesos()[1]);
+		assertEquals( 0.1001, camada1.getNeuronios()[0].getBias(), 0.00001);
+		
+		assertEquals( 0.1, camada1.getNeuronios()[1].getPesos()[0]);
+		assertEquals( 0.1, camada1.getNeuronios()[1].getPesos()[1]);
+		assertEquals( 0.1002, camada1.getNeuronios()[1].getBias(), 0.00001);
 		
 		
 	}

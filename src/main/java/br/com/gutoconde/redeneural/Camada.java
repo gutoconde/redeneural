@@ -1,23 +1,23 @@
 package br.com.gutoconde.redeneural;
 
+import java.io.Serializable;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
-public class Camada {
+public class Camada implements Serializable {
 	
-	private static Logger logger = Logger.getLogger(Camada.class.getName());
+	private static final long serialVersionUID = 1L;
 	
 	private int numeroNeuronios = 0;
 	
-	private Neuronio[] neuronios;;
+	private Neuronio[] neuronios;
 	
 	private Camada camadaAnterior;
 	
 	private Camada camadaSeguinte;
 	
-	private Double[] entradas;
+	private transient Double[] entradas;
 	
-	private Double[] saidas;
+	private transient Double[] saidas;
 		
 	private Camada(int numeroNeuronios, Camada camadaAnterior) {
 		this.numeroNeuronios = numeroNeuronios;
@@ -111,12 +111,26 @@ public class Camada {
 			getCamadaSeguinte().inicializar();
 		}
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Camada : { entradas: " + Arrays.toString(entradas) + ", saidas: " + Arrays.toString(saidas) + "}";
 	}
 	
-	
-
+	public String toJSON() {
+		StringBuilder str = new StringBuilder();
+		if(!isCamadaDeEntrada()) {
+			str.append("\n");
+			str.append("  ");
+			str.append("neuronios : [");
+			for(int i=0; i< getNumeroNeuronios(); i++) {
+				
+				str.append(getNeuronios()[i].toJSON());
+			}
+			str.append("\n");
+			str.append("  ");
+			str.append("]");
+		}
+		return str.toString();
+	}
 }
