@@ -18,7 +18,7 @@ public class ClassificacaoXOR {
 		//Criando rede
 		List<Integer> camadas = Arrays.asList(new Integer[]{2,2,1});
 		Perceptron rede = Perceptron.criar(camadas, new FuncaoSigmoid());
-		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.001, 5000);
+		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.001, 4000);
 		
 		List<Double[]> entradas = new ArrayList<Double[]>();
 		
