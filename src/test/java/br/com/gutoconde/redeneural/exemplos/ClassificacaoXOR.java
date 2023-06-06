@@ -18,7 +18,7 @@ public class ClassificacaoXOR {
 		//Criando rede
 		List<Integer> camadas = Arrays.asList(new Integer[]{2,2,1});
 		Perceptron rede = Perceptron.criar(camadas, new FuncaoSigmoid());
-		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.001, 4000);
+		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.0001, 1000000);
 		
 		List<Double[]> entradas = new ArrayList<Double[]>();
 		
@@ -42,7 +42,7 @@ public class ClassificacaoXOR {
 		System.out.println("Fim do treinamento: ");
 		Double[] resultado = rede.calcular(new Double[]{0.0, 0.0});
 		System.out.println("0 0 - " + resultado[0]);
-		//assertEquals(-1.0, resultado[0], 0.1);
+		//assertEquals(0.0, resultado[0], 0.1);
 		
 		resultado = rede.calcular(new Double[]{0.0, 1.0});
 		System.out.println("0 1 - " + resultado[0]);
@@ -54,7 +54,7 @@ public class ClassificacaoXOR {
 		
 		resultado = rede.calcular(new Double[]{1.0, 1.0});
 		System.out.println("1 1 - " + resultado[0]);
-		//assertEquals(-1.0, resultado[0], 0.1);
+		//assertEquals(0.0, resultado[0], 0.1);
 	}
 	
 }

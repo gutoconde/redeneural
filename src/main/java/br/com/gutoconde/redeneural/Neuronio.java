@@ -24,8 +24,6 @@ public class Neuronio implements Serializable {
 	
 	private transient Double delta;
 	
-	
-	
 	private Neuronio(int numeroEntradas, FuncaoDeAtivacao funcaoDeAtivacao) {
 		this.funcaoDeAtivacao = funcaoDeAtivacao;
 		pesos = new Double[numeroEntradas];
@@ -97,10 +95,10 @@ public class Neuronio implements Serializable {
 		this.pesos = new Double[numeroEntradas];
 		this.gradientesAcumulados = new Double[numeroEntradas];
 		for(int i = 0; i < numeroEntradas; i++) {
-			pesos[i] = RandomUtil.gerarNumeroAleatorio(0.0,  0.01);
+			pesos[i] = RandomUtil.gerarNumeroAleatorio(-2.0,  2.0);
 			gradientesAcumulados[i] = 0.0;
 		}
-		this.bias = RandomUtil.gerarNumeroAleatorio(0.0, 0.01);
+		this.bias = RandomUtil.gerarNumeroAleatorio(-2.0, 2.0);
 		this.gradienteAcumuladoBias = 0.0;
 	}
 	
