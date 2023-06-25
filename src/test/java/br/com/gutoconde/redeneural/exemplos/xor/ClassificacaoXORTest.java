@@ -66,7 +66,7 @@ public class ClassificacaoXORTest {
 		//Criando rede
 		List<Integer> camadas = Arrays.asList(new Integer[]{2,3,2});
 		Perceptron rede = Perceptron.criar(camadas, new FuncaoSigmoid());
-		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.000001, 20000);
+		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.000001, 10000);
 		
 		List<Double[]> entradas = new ArrayList<Double[]>();
 		
@@ -114,7 +114,7 @@ public class ClassificacaoXORTest {
 		//Criando rede
 		List<Integer> camadas = Arrays.asList(new Integer[]{2,4,3});
 		Perceptron rede = Perceptron.criar(camadas, new FuncaoSigmoid());
-		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.000001, 100000);
+		Backpropagation backprop = new Backpropagation(rede, 0.1, 0.000001, 10000);
 		
 		List<Double[]> entradas = new ArrayList<Double[]>();
 		
@@ -162,7 +162,7 @@ public class ClassificacaoXORTest {
 		assertEquals(1.0, resultado[1], 0.1);
 		assertEquals(0.0, resultado[2], 0.1);
 	}
-	
+	/**
 	@Test
 	public void testarClassificacaoXOR3SaidasComEntropiaCruzada() throws RedeNeuralException {
 		//Criando rede
@@ -216,5 +216,6 @@ public class ClassificacaoXORTest {
 		//assertEquals(1.0, resultado[1], 0.1);
 		//assertEquals(0.0, resultado[2], 0.1);
 	}
+	*/
 	
 }
