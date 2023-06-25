@@ -22,4 +22,9 @@ public class FuncaoTanh implements FuncaoDeAtivacao{
 		return calcularDerivada(entrada);
 	}
 
+	@Override
+	public Double calcularAjusteDelta(double entrada) {
+		return calcularDerivada(entrada);
+	}
+
 }

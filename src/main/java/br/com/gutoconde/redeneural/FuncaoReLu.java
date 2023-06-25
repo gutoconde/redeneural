@@ -27,5 +27,10 @@ public class FuncaoReLu implements FuncaoDeAtivacao{
 	public Double calcularDerivada(double entrada, Double[] entradas) {
 		return calcularDerivada(entrada);
 	}
+
+	@Override
+	public Double calcularAjusteDelta(double entrada) {
+		return calcularDerivada(entrada);
+	}
 	
 }

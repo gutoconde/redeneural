@@ -20,5 +20,10 @@ public class FuncaoIdentidade implements FuncaoDeAtivacao{
 	public Double calcularDerivada(double entrada, Double[] entradas) {
 		return calcularDerivada(entrada, entradas);
 	}
+
+	@Override
+	public Double calcularAjusteDelta(double entrada) {
+		return calcularDerivada(entrada);
+	}
 	
 }

@@ -99,7 +99,7 @@ public class Backpropagation {
 				
 				if(camada.isCamadaDeSaida()) {
 					double erro = saidasDesejadas[i] - saida;
-					delta =  erro * neuronio.getFuncaoDeAtivacao().calcularDerivada(saida, camada.getSaidas());
+					delta =  erro * neuronio.getFuncaoDeAtivacao().calcularAjusteDelta(saida);
 				} else {
 					Camada camadaSeguinte = camada.getCamadaSeguinte();
 					double somatorio = 0.0;
@@ -109,7 +109,7 @@ public class Backpropagation {
 						 
 						somatorio += w * neurorioCamadaSeguinte.getDelta();
 					}
-					delta = somatorio * neuronio.getFuncaoDeAtivacao().calcularDerivada(saida);
+					delta = somatorio * neuronio.getFuncaoDeAtivacao().calcularAjusteDelta(saida);
 				}
 				neuronio.setDelta(delta);
 			};
