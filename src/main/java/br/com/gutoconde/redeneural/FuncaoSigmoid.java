@@ -26,7 +26,7 @@ public class FuncaoSigmoid implements FuncaoDeAtivacao {
 	}
 
 	@Override
-	public Double calcularAjusteDelta(double entrada) {
+	public Double calcularFatorDeAjusteDoDelta(double entrada) {
 		return calcularDerivada(entrada);
 	}
 	

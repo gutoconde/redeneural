@@ -22,7 +22,7 @@ public class FuncaoIdentidade implements FuncaoDeAtivacao{
 	}
 
 	@Override
-	public Double calcularAjusteDelta(double entrada) {
+	public Double calcularFatorDeAjusteDoDelta(double entrada) {
 		return calcularDerivada(entrada);
 	}
 	

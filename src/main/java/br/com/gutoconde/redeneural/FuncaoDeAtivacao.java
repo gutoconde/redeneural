@@ -10,6 +10,6 @@ public interface FuncaoDeAtivacao {
 	
 	Double calcularDerivada(double entrada, Double entradas[]);
 	
-	Double calcularAjusteDelta(double entrada);
+	Double calcularFatorDeAjusteDoDelta(double entrada);
 
 }

@@ -35,7 +35,7 @@ public class FuncaoSoftMax implements FuncaoDeAtivacao {
 	}
 
 	@Override
-	public Double calcularAjusteDelta(double entrada) {
+	public Double calcularFatorDeAjusteDoDelta(double entrada) {
 		return 1.0;
 	}
 
