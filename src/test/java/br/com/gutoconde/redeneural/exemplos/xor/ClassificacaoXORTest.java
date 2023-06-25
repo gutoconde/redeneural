@@ -194,21 +194,21 @@ public class ClassificacaoXORTest {
 		System.out.println("Fim do treinamento: ");
 		Double[] resultado = rede.calcular(new Double[]{0.0, 0.0});
 		System.out.println("0 0 - " + resultado[0] + " " + resultado[1] + " " + resultado[2]);
-		//assertEquals(0.0, resultado[0], 0.1);
-		//assertEquals(1.0, resultado[1], 0.1);
-		//assertEquals(1.0, resultado[2], 0.1);
+		assertEquals(0.0, resultado[0], 0.1);
+		assertEquals(1.0, resultado[1], 0.1);
+		assertEquals(1.0, resultado[2], 0.1);
 		
 		resultado = rede.calcular(new Double[]{0.0, 1.0});
 		System.out.println("0 1 - " + resultado[0] + " " + resultado[1] + " " + resultado[2]);
-		//assertEquals(1.0, resultado[0], 0.1);
-		//assertEquals(0.0, resultado[1], 0.1);
-		//assertEquals(1.0, resultado[2], 0.1);
+		assertEquals(1.0, resultado[0], 0.1);
+		assertEquals(0.0, resultado[1], 0.1);
+		assertEquals(1.0, resultado[2], 0.1);
 		
 		resultado = rede.calcular(new Double[]{1.0, 0.0});
 		System.out.println("1 0 - " + resultado[0] + " " + resultado[1] + " " + resultado[2]);
-		//assertEquals(1.0, resultado[0], 0.1);
-		//assertEquals(0.0, resultado[1], 0.1);
-		//assertEquals(0.0, resultado[2], 0.1);
+		assertEquals(1.0, resultado[0], 0.1);
+		assertEquals(0.0, resultado[1], 0.1);
+		assertEquals(0.0, resultado[2], 0.1);
 		
 		resultado = rede.calcular(new Double[]{1.0, 1.0});
 		System.out.println("1 1 - " + resultado[0] + " " + resultado[1] + " " + resultado[2]);

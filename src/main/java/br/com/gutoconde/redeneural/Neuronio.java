@@ -97,10 +97,10 @@ public class Neuronio implements Serializable {
 		this.pesos = new Double[numeroEntradas];
 		this.gradientesAcumulados = new Double[numeroEntradas];
 		for(int i = 0; i < numeroEntradas; i++) {
-			pesos[i] = RandomUtil.gerarNumeroAleatorio(-0.1,  0.1);
+			pesos[i] = RandomUtil.gerarNumeroAleatorio(-10.0,  10.0);
 			gradientesAcumulados[i] = 0.0;
 		}
-		this.bias = RandomUtil.gerarNumeroAleatorio(-0.1, 0.1);
+		this.bias = RandomUtil.gerarNumeroAleatorio(-10.0, 10.0);
 		this.gradienteAcumuladoBias = 0.0;
 	}
 	
