@@ -10,4 +10,8 @@ public class RandomUtil {
 		return limiteInferior + secureRandom.nextDouble() * (limiteSuperior - limiteInferior);
 	}
 	
+	public synchronized static  Integer gerarInteiroAleatorio(int limiteSuperior) {
+		return secureRandom.nextInt(limiteSuperior);
+	}
+	
 }

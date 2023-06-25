@@ -14,6 +14,16 @@ public class FuncaoSigmoid implements FuncaoDeAtivacao {
 		double valorSig = calcular(entrada);
 		return valorSig * ( 1 - valorSig);
 	}
+
+	@Override
+	public Double calcular(double entrada, Double[] entradas) {
+		return calcular(entrada);
+	}
+
+	@Override
+	public Double calcularDerivada(double entrada, Double[] entradas) {
+		return calcularDerivada(entrada);
+	}
 	
 	
 

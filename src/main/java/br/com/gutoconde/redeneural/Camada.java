@@ -75,6 +75,10 @@ public class Camada implements Serializable {
 		return this.neuronios;
 	}
 	
+	public Double[] getSaidas() {
+		return this.saidas;
+	}
+	
 	public Double[] calcular(Double[] entradas) throws RedeNeuralException{
 		Double[] resultado = new Double[numeroNeuronios];
 		this.entradas = entradas;

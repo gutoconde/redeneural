@@ -40,6 +40,19 @@ public class Perceptron implements Serializable {
 		return criar(neuroniosEmCadaCamada, funcoes);
 	}
 	
+	public static Perceptron criar(List<Integer> neuroniosEmCadaCamada, FuncaoDeAtivacao funcaoDeAtivacao,
+			FuncaoDeAtivacao funcaoDeAtivacaoSaida) {
+		List<FuncaoDeAtivacao> funcoes = new ArrayList<FuncaoDeAtivacao>();
+		for (int i = 0; i < neuroniosEmCadaCamada.size(); i++) {
+			if(i == neuroniosEmCadaCamada.size() - 1) {
+				funcoes.add(funcaoDeAtivacaoSaida);
+			} else {
+				funcoes.add(funcaoDeAtivacao);
+			}
+		}
+		return criar(neuroniosEmCadaCamada, funcoes);
+	}
+	
 	public static Perceptron criar(List<Integer> neuroniosEmCadaCamada, List<FuncaoDeAtivacao> funcoesAtivacaoEmCadaCamada) {
 		return new Perceptron(neuroniosEmCadaCamada, funcoesAtivacaoEmCadaCamada);
 	}

@@ -9,6 +9,8 @@ public class Backpropagation {
 	
 	private Perceptron rede;
 	
+	private FuncaoDeCusto funcaoDeCusto;
+	
 	private double taxaAprendizado;
 	
 	private double erroMaximo;
@@ -18,10 +20,19 @@ public class Backpropagation {
 	public Backpropagation(Perceptron rede,
 			double taxaAprendizado, double erroMaxino, 
 			int numeroEpocas) {
+		this(rede, new ErroQuadraticoMedio(),
+				taxaAprendizado, erroMaxino,
+				numeroEpocas);
+	}
+	
+	public Backpropagation(Perceptron rede, FuncaoDeCusto funcaoDeCusto,
+			double taxaAprendizado, double erroMaxino, 
+			int numeroEpocas) {
 		this.rede = rede;
 		this.taxaAprendizado = taxaAprendizado;
 		this.erroMaximo = erroMaxino;
 		this.numeroEpocas = numeroEpocas;
+		this.funcaoDeCusto = funcaoDeCusto;
 	}
 	
 	public void treinarModoOnline(List<Double[]> conjuntoEntradas, List<Double[]> conjuntoSaidasDesejadas) throws RedeNeuralException {
@@ -65,18 +76,15 @@ public class Backpropagation {
 			}
 			atualizarPesosComGradientesAcumulados();
 			iteracoes++;
-			erroMedio = erroAcumulado / ( 2.0 *  new Double(conjuntoEntradas.size()));
+			erroMedio = Math.abs(erroAcumulado / ( 2.0 *  new Double(conjuntoEntradas.size())));
+			//erroMedio = erroAcumulado / ( 2.0 *  new Double(conjuntoEntradas.size()));
 			logger.info("Erro médio: " + erroMedio + " iteracoes: " + iteracoes);
 			
 		}while(erroMedio > erroMaximo && iteracoes < numeroEpocas);
 	}
 	
-	Double calcularErro(Double[] saidas, Double[] saidasDesejadas) {
-		Double erro = 0.0;
-		for(int i =0; i< saidas.length; i++) {
-			erro += Math.pow(saidas[i] - saidasDesejadas[i]  , 2.0) / 2.0;
-		}
-		return erro;
+	Double calcularErro(Double[] saidas, Double[] saidasEsperadas) {
+		return funcaoDeCusto.calcular(saidas, saidasEsperadas);
 	}
 	
 	void calcularDeltas(Double[] saidasDesejadas) throws RedeNeuralException {
@@ -91,7 +99,7 @@ public class Backpropagation {
 				
 				if(camada.isCamadaDeSaida()) {
 					double erro = saidasDesejadas[i] - saida;
-					delta =  erro * neuronio.getFuncaoDeAtivacao().calcularDerivada(saida);
+					delta =  erro * neuronio.getFuncaoDeAtivacao().calcularDerivada(saida, camada.getSaidas());
 				} else {
 					Camada camadaSeguinte = camada.getCamadaSeguinte();
 					double somatorio = 0.0;

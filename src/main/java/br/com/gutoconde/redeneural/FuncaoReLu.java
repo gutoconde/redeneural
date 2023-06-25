@@ -18,6 +18,14 @@ public class FuncaoReLu implements FuncaoDeAtivacao{
 		return 0.0;
 	}
 
+	@Override
+	public Double calcular(double entrada, Double[] entradas) {
+		return calcular(entrada);
+	}
 	
+	@Override
+	public Double calcularDerivada(double entrada, Double[] entradas) {
+		return calcularDerivada(entrada);
+	}
 	
 }

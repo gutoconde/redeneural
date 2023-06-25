@@ -11,5 +11,15 @@ public class FuncaoTanh implements FuncaoDeAtivacao{
 	public Double calcularDerivada(double entrada) {
 		return 1.0 - Math.pow(entrada, 2.0);
 	}
+	
+	@Override
+	public Double calcular(double entrada, Double[] entradas) {
+		return calcular(entrada);
+	}
+
+	@Override
+	public Double calcularDerivada(double entrada, Double[] entradas) {
+		return calcularDerivada(entrada);
+	}
 
 }
