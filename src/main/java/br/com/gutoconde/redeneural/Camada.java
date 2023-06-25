@@ -91,13 +91,17 @@ public class Camada implements Serializable {
 	}
 	
 	private Double[] calcularNeuronios(Double[]  entradas) throws RedeNeuralException {
+		Double[] somatorios = new Double[numeroNeuronios];
 		Double[] saidas = new Double[numeroNeuronios];
 		//A camada de entrada apenas repassa as entradas
 		if(isCamadaDeEntrada()) {
 			saidas = entradas;
 		} else {
 			for (int i = 0; i < numeroNeuronios; i++) {
-				saidas[i] = neuronios[i].calcular(entradas);
+				somatorios[i] = neuronios[i].calcularSomatorio(entradas);
+			}
+			for (int i = 0; i < numeroNeuronios; i++) {
+				saidas[i] = neuronios[i].calcularFuncaoDeAtivacao(somatorios[i], somatorios);
 			}
 		}
 		return saidas;

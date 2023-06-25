@@ -20,6 +20,8 @@ public class Neuronio implements Serializable {
 	
 	private transient Double[] entradas;
 	
+	private transient Double somatorio = 0.0;
+	
 	private transient Double saida;
 	
 	private transient Double delta;
@@ -102,7 +104,7 @@ public class Neuronio implements Serializable {
 		this.gradienteAcumuladoBias = 0.0;
 	}
 	
-	public Double calcular(Double entradas[]) throws RedeNeuralException{
+	public Double calcularSomatorio(Double entradas[]) throws RedeNeuralException{
 		this.entradas = entradas;
 		this.saida = 0.0;
 		
@@ -119,14 +121,18 @@ public class Neuronio implements Serializable {
 		if(entradas.length != pesos.length) {
 			throw new RedeNeuralException("O numero de pesos deve ser igual ao número de entradas do neurônio.");
 		}
-		Double somatorio = 0.0;
+		this.somatorio = 0.0;
 		for (int i = 0; i < pesos.length; i++) {
 			somatorio += entradas[i] * pesos[i];
 		}
-		somatorio += bias;
-		this.saida = funcaoDeAtivacao.calcular(somatorio, getEntradas());
-		return this.saida; 
-		
+		this.somatorio += bias;
+		return this.somatorio;
+	}
+	
+	public Double calcularFuncaoDeAtivacao(Double somatorio, Double[] somatorios) {
+		assert this.funcaoDeAtivacao != null;
+		this.saida = this.funcaoDeAtivacao.calcular(somatorio, somatorios);
+		return this.saida;
 	}
 	
 	public String toJSON() {

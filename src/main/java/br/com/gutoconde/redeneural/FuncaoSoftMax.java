@@ -15,10 +15,16 @@ public class FuncaoSoftMax implements FuncaoDeAtivacao {
 	@Override
 	public Double calcular(double entrada, Double[] entradas) {
 		double somatorio = 0.0;
-		for(int i = 0; i < entradas.length; i++) {
-			somatorio += Math.exp(entradas[i]);
+		double maiorValor = entradas[0];
+		for(int i = 1; i < entradas.length; i++) {
+			maiorValor = entradas[i] > maiorValor  ? entradas[i] : maiorValor;
 		}
-		return Math.exp(entrada) / somatorio;
+		
+		for(int i = 0; i < entradas.length; i++) {
+			somatorio += Math.exp(entradas[i] - maiorValor);
+		}
+		
+		return Math.exp(entrada - maiorValor) / somatorio;
 	}
 
 	@Override

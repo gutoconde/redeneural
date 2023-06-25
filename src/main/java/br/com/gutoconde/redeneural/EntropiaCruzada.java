@@ -9,7 +9,7 @@ public class EntropiaCruzada implements FuncaoDeCusto {
 		for(int i = 0; i < saidas.length; i++) {
 			somatorio += saidasEperadas[i] * Math.log(saidas[i]);
 		}
-		return - somatorio;
+		return -somatorio;
 	}
 
 }
